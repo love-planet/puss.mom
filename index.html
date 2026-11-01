@@ -29,7 +29,7 @@
       position: fixed;
       inset: 0;
       background: 
-        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75)),
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
         url('https://i.postimg.cc/6qKRqYFp/photo-2026-10-30-21-14-09.jpg') center/cover no-repeat;
       z-index: 0;
     }
@@ -37,42 +37,41 @@
     .card {
       position: relative;
       z-index: 1;
-      background: rgba(15, 15, 20, 0.85);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 40px 28px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 20px 16px;
       max-width: 400px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      box-shadow: none;
     }
 
     @media (min-width: 480px) {
       .card {
-        padding: 48px 40px;
+        padding: 24px 20px;
       }
     }
 
     .lang-switch {
       position: absolute;
-      top: 14px;
-      right: 14px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      top: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
       padding: 7px 14px;
       font-size: 13px;
-      color: #ccc;
+      color: #eee;
       cursor: pointer;
       transition: all 0.2s;
       user-select: none;
       z-index: 5;
+      backdrop-filter: blur(6px);
     }
 
     .lang-switch:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.5);
       color: #fff;
     }
 
@@ -87,25 +86,28 @@
       justify-content: center;
       font-size: 26px;
       font-weight: 700;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
     h1 {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 21px;
+      font-weight: 700;
       margin-bottom: 12px;
       letter-spacing: -0.3px;
       line-height: 1.3;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
     }
 
     @media (min-width: 480px) {
-      h1 { font-size: 22px; }
+      h1 { font-size: 23px; }
     }
 
     p {
-      color: #bbb;
-      font-size: 14.5px;
+      color: #f0f0f0;
+      font-size: 15px;
       line-height: 1.55;
       margin-bottom: 28px;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.7);
     }
 
     .buttons {
@@ -129,15 +131,16 @@
       cursor: pointer;
       border: none;
       transition: all 0.2s;
-      min-height: 48px; /* удобно для пальцев */
+      min-height: 48px;
     }
 
     .btn-yes {
       background: linear-gradient(135deg, #7c3aed, #2563eb);
       color: #fff;
-      opacity: 0.45;
+      opacity: 0.5;
       pointer-events: none;
       transition: opacity 0.4s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.35);
     }
 
     .btn-yes.active {
@@ -147,18 +150,18 @@
 
     .btn-yes.active:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.5);
     }
 
     .btn-no {
-      background: rgba(255, 255, 255, 0.08);
-      color: #ddd;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(6px);
     }
 
     .btn-no:hover {
-      background: rgba(255, 255, 255, 0.14);
-      color: #fff;
+      background: rgba(0, 0, 0, 0.6);
     }
 
     .denied {
@@ -166,9 +169,9 @@
       color: #f87171;
       font-size: 15px;
       margin-top: 18px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
     }
 
-    /* Honeypot (скрытое поле против ботов) */
     .hp {
       position: absolute;
       left: -9999px;
@@ -190,7 +193,6 @@
     <h1 id="title">Подтверждение возраста</h1>
     <p id="desc">Этот контент предназначен только для лиц старше 18 лет. Вам уже исполнилось 18?</p>
 
-    <!-- Honeypot -->
     <input type="text" class="hp" id="hp" name="website" tabindex="-1" autocomplete="off">
 
     <div class="buttons">
@@ -246,33 +248,26 @@
       applyLang();
     }
 
-    // Антибот: кнопка "Да" активируется только после взаимодействия
     function activateButton() {
       if (humanDetected) return;
       humanDetected = true;
       document.getElementById('yesBtn').classList.add('active');
     }
 
-    // Слушаем любое человеческое взаимодействие
     ['mousemove', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
       window.addEventListener(evt, activateButton, { once: true, passive: true });
     });
 
-    // Дополнительная задержка (боты часто кликают мгновенно)
     setTimeout(() => {
-      if (!humanDetected) {
-        // Если за 2.5 сек ничего не сделали — всё равно активируем (для тех, кто просто читает)
-        document.getElementById('yesBtn').classList.add('active');
-      }
+      document.getElementById('yesBtn').classList.add('active');
     }, 2500);
 
     function enter() {
-      // Проверки антибота
       const hp = document.getElementById('hp').value;
-      if (hp) return; // honeypot заполнен → бот
+      if (hp) return;
 
       const timeOnPage = Date.now() - pageLoadTime;
-      if (timeOnPage < 800) return; // слишком быстро → скорее всего бот
+      if (timeOnPage < 800) return;
 
       if (!document.getElementById('yesBtn').classList.contains('active')) return;
 
